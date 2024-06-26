@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-
+use App\Models\Jurusan;
 class StudentController extends Controller
 {
     /**
@@ -14,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data['students'] = Student::all(); // select * from student
+        $data['students'] = Student::with('jurusan')->get(); // select * from student
         return view('student.index',$data);
     }
 
@@ -25,7 +25,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('student.create');
+        $data['jurusan'] = Jurusan::all();
+        return view('student.create',$data);
     }
 
     /**
@@ -43,6 +44,7 @@ class StudentController extends Controller
         $student->name = $request->name;
         $student->nis = $request->nis;
         $student->birth_date = $request->birth_date;
+        $student->jurusan_id = $request->jurusan_id;
         $student->save();
 
         // cara insert kedua
